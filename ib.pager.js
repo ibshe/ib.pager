@@ -2,7 +2,7 @@
 	ibPager = {
 		initAble : true,
 		callBack:"",
-		init : function(callback){
+		initRender : function(callback){
 			var dom = "<div class='pageFirst' style='visibility:hidden'>首页</div>"+
 	        "<div class='pageUp' style='visibility:hidden'>« 上一页</div>"+
 	       	"<div class='pageList'><ul class='pageUl'></ul></div>"+
@@ -10,13 +10,16 @@
 	        "<div class='pageLast' style='visibility:hidden'>末页</div>";
 			$("#ibPager").html(dom);			
 			ibPager.initAble=false;
+		},	
+		init : function(curPage,pageCount,func){
+			ibPager.reload(curPage,pageCount,func);
 		},
 		reload : function(curPage,totalPage,callback,tag){
 			if(callback!=""){
 				ibPager.callBack=callback;
 			}			
 			if(tag=="1"){
-				var fn = eval(ibPager.callBack);
+				var fn = eval(ibPager.callBack);				
 				new fn(curPage,totalPage);
 			}
 			if(totalPage>=5){
@@ -118,5 +121,5 @@
 	$(document).on("click","#ibPager .pageLast",function(){
 		ibPager.reload(pageCount,pageCount,"","1");	
 	});
-	ibPager.init();
+	ibPager.initRender();
 })(jQuery);
