@@ -2,55 +2,59 @@
 	ibPager = {
 		initAble : true,
 		callBack:"",
-		initRender : function(callback){
+		selector:null,
+		initRender : function(selector){
 			var dom = "<div class='pageFirst' style='visibility:hidden'>首页</div>"+
 	        "<div class='pageUp' style='visibility:hidden'>« 上一页</div>"+
-	       	"<div class='pageList'><ul class='pageUl'></ul></div>"+
+	       	"<div ><ul class='pageUl'></ul></div>"+
 	        "<div class='pageDown'  style='visibility:hidden'>下一页 »</div>"+
 	        "<div class='pageLast' style='visibility:hidden'>末页</div>";
-			$("#ibPager").html(dom);			
-			ibPager.initAble=false;
+			$(selector).html(dom);
+			ibPager.selector=selector;
 		},	
-		init : function(curPage,pageCount,func){
-			ibPager.reload(curPage,pageCount,func);
+		init : function(curPage,pageCount,func,selector){
+			if($(selector).children().length==0){
+				ibPager.initRender(selector);
+			}
+			ibPager.reload(curPage,pageCount,func,"",$(selector));
 		},
-		reload : function(curPage,totalPage,callback,tag){
+		reload : function(curPage,totalPage,callback,tag,selector){
 			if(callback!=""){
 				ibPager.callBack=callback;
-			}			
-			if(tag=="1"){
-				var fn = eval(ibPager.callBack);				
-				new fn(curPage,totalPage);
-			}
+			}	
 			if(totalPage>=5){
 				switch(curPage){
 					case 1:
-						ibPager.page_render(1,5,1);
+						ibPager.page_render(1,5,1,selector);
 					break;
 					case 2:
-						ibPager.page_render(1,5,2);
+						ibPager.page_render(1,5,2,selector);
 					break;
 					case 3:
-						ibPager.page_render(1,5,3);
+						ibPager.page_render(1,5,3,selector);
 					break;
 					case totalPage-2:
-						ibPager.page_render(totalPage-4,totalPage,3);
+						ibPager.page_render(totalPage-4,totalPage,3,selector);
 					break;
 					case totalPage-1:
-						ibPager.page_render(totalPage-4,totalPage,4);
+						ibPager.page_render(totalPage-4,totalPage,4,selector);
 					break;
 					case totalPage:
-						ibPager.page_render(totalPage-4,totalPage,5);				
+						ibPager.page_render(totalPage-4,totalPage,5,selector);				
 					break;
 					default:
-						ibPager.page_render(curPage-2,curPage+2,3);
+						ibPager.page_render(curPage-2,curPage+2,3,selector);
 					break;
 				}
 			}else{
-				ibPager.page_render(1,totalPage,curPage);
+				ibPager.page_render(1,totalPage,curPage,selector);
+			}
+			if(tag=="1"){
+				var fn = eval(ibPager.callBack);				
+				new fn(curPage,totalPage,selector);
 			}
 		},
-		page_render : function(page,count,curPage){
+		page_render : function(page,count,curPage,selector){
 			var ul_html = "";
 			var tatal1 ;
 			var pageSize = count-page+1;
@@ -72,54 +76,57 @@
 				return;
 			}else{				
 				if(count==1){
-					$(".pageUp").css('visibility', 'hidden');
-					$(".pageFirst").css('visibility', 'hidden');					
-					$(".pageDown").css('visibility', 'hidden');
-					$(".pageLast").css('visibility', 'hidden');
+					selector.find(".pageUp").css('visibility', 'hidden');
+					selector.find(".pageFirst").css('visibility', 'hidden');					
+					selector.find(".pageDown").css('visibility', 'hidden');
+					selector.find(".pageLast").css('visibility', 'hidden');
 				}else{
 				if(curPage<=1){
-					$(".pageUp").css('visibility', 'hidden');
-					$(".pageFirst").css('visibility', 'hidden');					
-					$(".pageDown").css('visibility', 'visible');
-					$(".pageLast").css('visibility', 'visible');
+					selector.find(".pageUp").css('visibility', 'hidden');
+					selector.find(".pageFirst").css('visibility', 'hidden');					
+					selector.find(".pageDown").css('visibility', 'visible');
+					selector.find(".pageLast").css('visibility', 'visible');
 				}else if(curPage>=pageSize){
-					$(".pageUp").css('visibility', 'visible');
-					$(".pageDown").css('visibility', 'hidden');
-					$(".pageFirst").css('visibility', 'visible');
-					$(".pageLast").css('visibility', 'hidden');
+					selector.find(".pageUp").css('visibility', 'visible');
+					selector.find(".pageDown").css('visibility', 'hidden');
+					selector.find(".pageFirst").css('visibility', 'visible');
+					selector.find(".pageLast").css('visibility', 'hidden');
 				}else{
-					$(".pageUp").css('visibility', 'visible');
-					$(".pageDown").css('visibility', 'visible');
-					$(".pageFirst").css('visibility', 'visible');
-					$(".pageLast").css('visibility', 'visible');
+					selector.find(".pageUp").css('visibility', 'visible');
+					selector.find(".pageDown").css('visibility', 'visible');
+					selector.find(".pageFirst").css('visibility', 'visible');
+					selector.find(".pageLast").css('visibility', 'visible');
 				}
 			 }
 			}
 			for(var i=page; i<=tatal1; i++){
-				ul_html += "<li>"+i+"</li>";
+				ul_html += "<li style='border:1px solid #999;'>"+i+"</li>";
 			}
-			$("#ibPager ul").html(ul_html);
-			$("#ibPager ul li").eq(curPage-1).addClass("on");
+			/*$(selector+" ul").html(ul_html);
+			$(selector+" ul li").eq(curPage-1).addClass("on");*/
+
+			selector.find(" ul").html(ul_html);
+			selector.find(" ul li").eq(curPage-1).addClass("on");
 		}
 	}
 	
-	$(document).on("click","#ibPager li",function(){
+	$(document).on("click",".ibPager_ li",function(){
 		var pageNum = parseInt($(this).html());	
-		ibPager.reload(pageNum,pageCount,"","1");
+		ibPager.reload(pageNum,pageCount,"","1",$("#"+$(this).parent().parent().parent().attr("id")));
 	});
-	$(document).on("click","#ibPager .pageUp",function(){
-		var pageNum = parseInt($("#ibPager li.on").html());
-		ibPager.reload(pageNum-1,pageCount,"","1");	
+	$(document).on("click",".ibPager_ .pageUp",function(){
+		var pageNum = parseInt($(this).parent().find("li.on").html());
+		ibPager.reload(pageNum-1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
 	});
-	$(document).on("click","#ibPager .pageDown",function(){
-		var pageNum = parseInt($("#ibPager li.on").html());
-		ibPager.reload(pageNum+1,pageCount,"","1");	
+	$(document).on("click",".ibPager_ .pageDown",function(){
+		var pageNum = parseInt($(this).parent().find("li.on").html());
+		ibPager.reload(pageNum+1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
 	});
-	$(document).on("click","#ibPager .pageFirst",function(){
-		ibPager.reload(1,pageCount,"","1");	
+	$(document).on("click",".ibPager_ .pageFirst",function(){
+		ibPager.reload(1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
 	});
-	$(document).on("click","#ibPager .pageLast",function(){
-		ibPager.reload(pageCount,pageCount,"","1");	
+	$(document).on("click",".ibPager_ .pageLast",function(){
+		ibPager.reload(pageCount,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
 	});
-	ibPager.initRender();
+	//ibPager.initRender();
 })(jQuery);

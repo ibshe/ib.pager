@@ -7,19 +7,33 @@
 <link type="text/css" rel="styleSheet"  href="ib.pager.css" />
 </head>
 <body>
-    <div id="ibPager"></div>
+    <div id="ibPager" class="ibPager_"></div>
+    <div id="ibPager1" class="ibPager_"></div>
 <script type="text/javascript" src="jquery-1.9.0.js"></script>
 <script type="text/javascript" src="ib.pager.js"></script>
 <script type="text/javascript">
+
 	var pageSize = 5;//自定义
 	var pageCount = 10;	
-	//初始化分页组件	参数为：当前页码，总页数，回调函数
-	ibPager.init(1,pageCount,"reloadList");
+	//初始化分页组件	参数为：当前页码，总页数，回调函数, 选择器id
+	ibPager.init(1,pageCount,"reloadList","#ibPager");
 	//回调，分页器刷新前调用，可以用于刷新显示内容或其他
-	function reloadList(a,b){
-		alert("当前页："+a+" 总页数："+b);
+	function reloadList(a,b,c){
+		alert("回调: 当前页："+a+" 总页数："+b+"  触发的元素:"+c.attr("id"));
 		//做你想做的事
 	}
+
+
+
+	var pageCount1 = 15;	
+	//初始化分页组件	参数为：当前页码，总页数，回调函数, 选择器id
+	ibPager.init(1,pageCount1,"reloadList1","#ibPager1");
+	//回调，分页器刷新前调用，可以用于刷新显示内容或其他
+	function reloadList1(a,b,c){
+		alert("回调：当前页："+a+" 总页数："+b+"  触发的元素:"+c.attr("id"));
+		//做你想做的事
+	}
+
 </script>
 </body>
 </html>
