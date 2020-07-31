@@ -8,20 +8,31 @@
 	        "<div class='pageUp' style='visibility:hidden'>« 上一页</div>"+
 	       	"<div ><ul class='pageUl'></ul></div>"+
 	        "<div class='pageDown'  style='visibility:hidden'>下一页 »</div>"+
-	        "<div class='pageLast' style='visibility:hidden'>末页</div>";
+	        "<div class='pageLast' style='visibility:hidden'>末页</div>"+
+	        "<div class='pageC_' style='display:none'></div>"+
+	        "<div class='callbackFn_' style='display:none'></div>";
 			$(selector).html(dom);
 			ibPager.selector=selector;
 		},	
-		init : function(curPage,pageCount,func,selector){
+		init : function(curPage,pageCount_,func,selector){
 			if($(selector).children().length==0){
 				ibPager.initRender(selector);
 			}
-			ibPager.reload(curPage,pageCount,func,"",$(selector));
+			$(selector).find(".pageC_").html(pageCount_);
+			$(selector).find(".callbackFn_").html(func);
+			ibPager.reload(curPage,pageCount_,func,"",$(selector));
 		},
 		reload : function(curPage,totalPage,callback,tag,selector){
-			if(callback!=""){
-				ibPager.callBack=callback;
+			if(callback!=""&&callback!=null){
+				ibPager.callBack=callback;				
 			}	
+			if(tag=="1"){
+				var ca = $(selector).find(".callbackFn_").html();
+					if(ca){
+						var fn = eval(ca);				
+						new fn(curPage,totalPage,selector);
+					}
+				}
 			if(totalPage>=5){
 				switch(curPage){
 					case 1:
@@ -49,10 +60,8 @@
 			}else{
 				ibPager.page_render(1,totalPage,curPage,selector);
 			}
-			if(tag=="1"){
-				var fn = eval(ibPager.callBack);				
-				new fn(curPage,totalPage,selector);
-			}
+			
+			
 		},
 		page_render : function(page,count,curPage,selector){
 			var ul_html = "";
@@ -111,22 +120,26 @@
 	}
 	
 	$(document).on("click",".ibPager_ li",function(){
-		var pageNum = parseInt($(this).html());	
-		ibPager.reload(pageNum,pageCount,"","1",$("#"+$(this).parent().parent().parent().attr("id")));
+		var pageNum__ = parseInt($(this).html());	
+		var pageCount__ = $(this).parent().parent().parent().find(".pageC_").html();
+		ibPager.reload(pageNum__,pageCount__,"","1",$("#"+$(this).parent().parent().parent().attr("id")));
 	});
 	$(document).on("click",".ibPager_ .pageUp",function(){
-		var pageNum = parseInt($(this).parent().find("li.on").html());
-		ibPager.reload(pageNum-1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
+		var pageNum__ = parseInt($(this).parent().find("li.on").html());
+		var pageCount__ = $(this).parent().find(".pageC_").html();
+		ibPager.reload(pageNum__-1,pageCount__,"","1",$("#"+$(this).parent().attr("id")));	
 	});
 	$(document).on("click",".ibPager_ .pageDown",function(){
-		var pageNum = parseInt($(this).parent().find("li.on").html());
-		ibPager.reload(pageNum+1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
+		var pageNum__ = parseInt($(this).parent().find("li.on").html());
+		var pageCount__ = $(this).parent().find(".pageC_").html();
+		ibPager.reload(pageNum__+1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
 	});
 	$(document).on("click",".ibPager_ .pageFirst",function(){
-		ibPager.reload(1,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
+		var pageCount__ = $(this).parent().find(".pageC_").html();
+		ibPager.reload(1,pageCount__,"","1",$("#"+$(this).parent().attr("id")));	
 	});
 	$(document).on("click",".ibPager_ .pageLast",function(){
-		ibPager.reload(pageCount,pageCount,"","1",$("#"+$(this).parent().attr("id")));	
+		var pageCount__ = $(this).parent().find(".pageC_").html();
+		ibPager.reload(pageCount__,pageCount__,"","1",$("#"+$(this).parent().attr("id")));	
 	});
-	//ibPager.initRender();
 })(jQuery);
