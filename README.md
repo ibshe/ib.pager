@@ -21,8 +21,8 @@ ibPager.init(1,pageCount,"reloadList","#ibPager");
 3、回调函数(点击分页器触发)：
 -----------------------------------------------
 ~~~javascript
-function reloadList(a,b,c){<br>
-        alert("回调：当前页："+a+" 总页数："+b+"  触发的元素:"+c.attr("id"));<br>
-        //做你想做的事<br>
+function reloadList(a,b,c){
+        alert("回调：当前页："+a+" 总页数："+b+"  触发的元素:"+c.attr("id"));
+        //做你想做的事
 }
 ~~~
