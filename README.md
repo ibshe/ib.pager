@@ -4,7 +4,9 @@ A simple paging component independent of table, decoupling table. In addition to
 and is easy to use. You just need to bring in resources, one line of code integration.
 
 单页面可同时使用多个分页组件，每个组件初始化一次，只须元素id不同即可。例如：
+
 ======================================================================================================================================
+
 1、引用：
 <div id="ibPager" class="ibPager_"></div>
 
@@ -17,4 +19,5 @@ function reloadList(a,b,c){
         alert("回调：当前页："+a+" 总页数："+b+"  触发的元素:"+c.attr("id"));
         //做你想做的事
 }
+
 ========================================================================================================================================
