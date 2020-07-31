@@ -7,9 +7,9 @@ and is easy to use. You just need to bring in resources, one line of code integr
 
 1、引用：
 -------------------------------------------
-···html
+~~~html
 <div id="ibPager" class="ibPager_"></div>
-···
+~~~
 
 2、任意位置一行代码初始化：
 --------------------------------------------------
