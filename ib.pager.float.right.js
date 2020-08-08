@@ -1,33 +1,29 @@
 (function($){
 	ibPager = {
-		initAble : true,
-		callBack:"",
-		selector:null,
 		initRender : function(selector){
-			var dom = "<div class='pageFirst' style='visibility:hidden'>首页</div>"+
-	        "<div class='pageUp' style='visibility:hidden'>« 上一页</div>"+
+			var dom = "<div class='pageFirst' style='display:none'>首页</div>"+
+	        "<div class='pageUp' style='display:none'>« 上一页</div>"+
 	       	"<div ><ul class='pageUl'></ul></div>"+
-	        "<div class='pageDown'  style='visibility:hidden'>下一页 »</div>"+
-	        "<div class='pageLast' style='visibility:hidden'>末页</div>"+
+	        "<div class='pageDown'  style='display:none'>下一页 »</div>"+
+	        "<div class='pageLast' style='display:none'>末页</div>"+
 	        "<div class='pageC_' style='display:none'></div>"+
 	        "<div class='callbackFn_' style='display:none'></div>";
-			$(selector).html(dom);
-			ibPager.selector=selector;
-			$(document).on("click",".ibPager_ .pageUp",function(){
+			$(selector).html(dom);			
+			$(".pageUp").click(function(){
 				var pageNum__ = parseInt($(this).parent().find("li.on").html());
 				var pageCount__ = $(this).parent().find(".pageC_").html();
 				ibPager.reload(pageNum__-1,pageCount__,"","1",$(this).parent());	
 			});
-			$(document).on("click",".ibPager_ .pageDown",function(){
+			$(".pageDown").click(function(){
 				var pageNum__ = parseInt($(this).parent().find("li.on").html());
 				var pageCount__ = $(this).parent().find(".pageC_").html();
 				ibPager.reload(pageNum__+1,pageCount__,"","1",$(this).parent());	
 			});
-			$(document).on("click",".ibPager_ .pageFirst",function(){
+			$(".pageFirst").click(function(){
 				var pageCount__ = $(this).parent().find(".pageC_").html();
 				ibPager.reload(1,pageCount__,"","1",$(this).parent());	
 			});
-			$(document).on("click",".ibPager_ .pageLast",function(){
+			$(".pageLast").click(function(){
 				var pageCount__ = $(this).parent().find(".pageC_").html();
 				ibPager.reload(pageCount__,pageCount__,"","1",$(this).parent());	
 			});
@@ -41,6 +37,7 @@
 			ibPager.reload(curPage,pageCount_,func,"",$(selector));
 		},
 		reload : function(curPage,totalPage,callback,tag,selector){
+			console.log("应用超市:"+curPage+"====="+totalPage+"====="+callback+"====="+tag+"====="+selector);
 			if(callback!=""&&callback!=null){
 				ibPager.callBack=callback;				
 			}	
@@ -78,8 +75,6 @@
 			}else{
 				ibPager.page_render(1,totalPage,curPage,selector);
 			}
-			
-			
 		},
 		page_render : function(page,count,curPage,selector){
 			var ul_html = "";
@@ -90,7 +85,7 @@
 			}else{
 				tatal1=count;
 			}
-			if(curPage>pageSize){
+			if(curPage>count){
 				alert("页码过大");
 				return;
 			}
@@ -102,7 +97,7 @@
 				alert("页码不正确");
 				return;
 			}else{				
-				if(count==1){
+				/*if(count==1){
 					selector.find(".pageUp").css('visibility', 'hidden');
 					selector.find(".pageFirst").css('visibility', 'hidden');					
 					selector.find(".pageDown").css('visibility', 'hidden');
@@ -123,6 +118,28 @@
 					selector.find(".pageDown").css('visibility', 'visible');
 					selector.find(".pageFirst").css('visibility', 'visible');
 					selector.find(".pageLast").css('visibility', 'visible');
+				}*/
+				if(count==1){
+					selector.find(".pageUp").css('display', 'none');
+					selector.find(".pageFirst").css('display', 'none');					
+					selector.find(".pageDown").css('display', 'none');
+					selector.find(".pageLast").css('display', 'none');
+				}else{
+				if(curPage<=1){
+					selector.find(".pageUp").css('display', 'none');
+					selector.find(".pageFirst").css('display', 'none');					
+					selector.find(".pageDown").css('display', 'block');
+					selector.find(".pageLast").css('display', 'block');
+				}else if(curPage>=pageSize){
+					selector.find(".pageUp").css('display', 'block');
+					selector.find(".pageDown").css('display', 'none');
+					selector.find(".pageFirst").css('display', 'block');
+					selector.find(".pageLast").css('display', 'none');
+				}else{
+					selector.find(".pageUp").css('display', 'block');
+					selector.find(".pageDown").css('display', 'block');
+					selector.find(".pageFirst").css('display', 'block');
+					selector.find(".pageLast").css('display', 'block');
 				}
 			 }
 			}
@@ -134,13 +151,13 @@
 
 			selector.find(" ul").html(ul_html);
 			selector.find(" ul li").eq(curPage-1).addClass("on");
-			$(document).on("click",".ibPager_ li",function(){
-			var pageNum__ = parseInt($(this).html());	
-			var pageCount__ = $(this).parent().parent().parent().find(".pageC_").html();
-			ibPager.reload(pageNum__,pageCount__,"","1",$(this).parent().parent().parent());
-	});
-	
+			$(".ibPager_ li").click(function(){
+				var pageNum__ = parseInt($(this).html());	
+				var pageCount__ = $(this).parent().parent().parent().find(".pageC_").html();
+				ibPager.reload(pageNum__,pageCount__,"","1",$(this).parent().parent().parent());
+			});
 		}
+		
 	}
 	
 	
