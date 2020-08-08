@@ -182,8 +182,10 @@
 			$(".ibPager_ li").mouseover(function(){
 				if($(this).hasClass("on")){
 					$(this).css("color","#fff");
+					$(this).css("cursor","text");
 				}else{
 					$(this).css("color","#0084F5");
+					$(this).css("cursor","pointer");
 				}
 				$(this).css("border-color","#0084F5");
 				$(this).css("border-width","1px");				
@@ -192,8 +194,10 @@
 			$(".ibPager_ li").mouseout(function(){
 				if($(this).hasClass("on")){
 					$(this).css("color","#fff");
+					$(this).css("cursor","text");
 				}else{
 					$(this).css("color","#000");
+					$(this).css("cursor","pointer");
 				}
 				$(this).css("border-color","#999");
 				$(this).css("border-width","1px");				
